@@ -26,8 +26,7 @@ var roleHarvester = {
             
         }
         else {
-            
-            if (!creep.memory.roomname) {
+            if (!creep.memory.roomname || (creep.pos.roomName == Game.spawns[creep.memory.home].pos.roomName)) {
                 let targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return ( structure.structureType == STRUCTURE_EXTENSION ||
@@ -43,7 +42,7 @@ var roleHarvester = {
                     }
                 }
             } else {
-                let target = Game.spawns['Spawn1']
+                let target = Game.spawns[creep.memory.home]
                 if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                         creep.say('🏚️')
@@ -52,6 +51,26 @@ var roleHarvester = {
             
             
         }
+    },
+    
+    dropMine: function(creep) { // definitely use this at RCL 2. switch to canMine after for carry part for occasional repairs.
+        if (!(creep.memory.sourceID)) {
+            /*
+            find sources
+            loop til you find a source that there is no harvester for
+            */
+        } else if (!(creep.memory.dropPos)) {
+            /*
+            scan the area around a source til you find an empty space you can path to, then make that your position.
+            !!!!
+            Maybe put both of these in the spawn program
+            */
+        }
+        /*
+        go to position
+        harvest with no carry parts (forever)
+        */
+        
     }
 };
 

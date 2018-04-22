@@ -25,12 +25,12 @@ var roleBuilder = {
                 target = creep.room.find(FIND_STRUCTURES, {
 					filter: (structure) => {
 						return (structure) &&
-							structure.hits < structure.hitsMax;
+							structure.hits < 2 * structure.hitsMax / 3; 
 					}
 				});
 				target = creep.pos.findClosestByPath(target)
                 if(creep.repair(target) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target, {visualizePathStyle: {stroke: '#000000'}});
+                    creep.moveTo(target, {visualizePathStyle: {stroke: '#00ff00'}});
                 }
             }
         }

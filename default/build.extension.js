@@ -10,7 +10,6 @@ var buildExtensions = {
 		let ERROR;
 		
 		Game.rooms[currentRoom].createConstructionSite(xPos, yPos - 3, STRUCTURE_TOWER)
-		
 		for (let i = 0; i < extArray[0]; i++)   {
 			for (let j = 0; j < extArray[1]; j++)   {
 				if((ERROR = Game.rooms[currentRoom].createConstructionSite(xPos + extPos[0] + i, yPos + extPos[1] + j, STRUCTURE_EXTENSION)) == 0) {

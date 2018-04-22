@@ -19,7 +19,7 @@ var f_spawn = {
     },
     
     level1: function(spawn)  {
-        let harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
+        let harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && !(creep.memory.roomname));
         let builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
         let upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         let bodyparts = [WORK,CARRY,MOVE,MOVE]

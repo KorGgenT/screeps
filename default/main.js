@@ -35,20 +35,6 @@ module.exports.loop = function () {
 		} else if (currentRoom.energyAvailable > 549) {
 			f_spawn.level2(spawn)
 			f_spawn.defender2(spawn)
-			
-			//spawn a 'manual' remote harvesting creep. note: need to reset this after respawning
-			let harvesters = _.filter(Game.creeps, (creep) => {creep.memory.role == 'harvester' && creep.memory.home == spawn});
-			
-			
-			if(harvesters.length < 4) {
-				let newName = 'Harvester' + Game.time;
-				console.log(spawn + " spawning new remote harvester: " + newName);
-				G_spawn.spawnCreep([WORK,CARRY,WORK,CARRY,WORK,MOVE,MOVE,MOVE], newName,
-					{
-						memory: {role: 'harvester', x: 44, y: 5, roomname: 'W88S73', home: spawn}
-					}
-				);
-			}
 		}
 
 		if(G_spawn.spawning) {
@@ -59,6 +45,18 @@ module.exports.loop = function () {
 				G_spawn.pos.y,
 				{align: 'left', opacity: 0.8});
 		}
+	}
+	
+	//spawn a 'manual' remote harvesting creep. note: need to reset this after respawning
+	let harvesters = _.filter(Game.creeps, (creep) => (creep.memory.role == 'harvester') && (creep.memory.roomname == 'W88S73'));
+	if((harvesters.length < 1) && (Game.spawns['Spawn1'].room.energyAvailable > 549)) {
+		let newName = 'Harvester' + Game.time;
+		console.log("Spawn1 spawning new remote harvester: " + newName);
+		Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,WORK,CARRY,WORK,MOVE,MOVE,MOVE], newName,
+			{
+				memory: {role: 'harvester', x: 44, y: 5, roomname: 'W88S73', home: "Spawn1"}
+			}
+		);
 	}
 		
     for(let name in Game.creeps) {
