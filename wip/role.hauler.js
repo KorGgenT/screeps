@@ -2,7 +2,8 @@ var = roleHauler {
    run: function(creep) {
 	   
 	   if (creep.carry.energy < creep.carryCapacity) {
-           let target = creep.findClosestByPath(FIND_DROPPED_ENERGY)
+           let target = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY)
+           console.log(target)
     	   if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
     		   moveTo(target)
     	   }

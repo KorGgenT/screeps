@@ -1,4 +1,5 @@
 var roleHarvester = require('role.harvester');
+var roleHauler = require('role.hauler');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleDefender = require('role.defender');
@@ -16,14 +17,14 @@ module.exports.loop = function () {
     }
 	
 	for (let spawn in Game.spawns) {
-		let G_spawn = Game.spawns[spawn]
-		let currentRoom = Game.spawns[spawn].room
-		let controllerLevel = currentRoom.controller.level
+		let G_spawn = Game.spawns[spawn];
+		let currentRoom = Game.spawns[spawn].room;
+		let controllerLevel = currentRoom.controller.level;
 		switch(controllerLevel) {
-			case 2:
-				buildExtensions.run(spawn)
 			case 3:
 				tower.run(G_spawn.room)
+			case 2:
+				buildExtensions.run(spawn)
 		}
 		
         
@@ -43,38 +44,32 @@ module.exports.loop = function () {
 			let builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
 			let upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
 			
-			let parts = f_spawn.bodyParts(currentRoom.energyAvailable)
+			let parts = f_spawn.bodyParts(currentRoom.energyAvailable);
 			
 			/* if there is not a harvseter for each source in memory,
 				finds out which don't have one and spawns one for it. */
-			console.log("-----------")
-			console.log(harvesters)
-			if (haulers.length < 1) {
-				f_spawn.worker(spawn, 'hauler', parts.hauler)
+			//console.log(JSON.stringify(harvesters));
+			if (haulers.length < (2 * harvesters.length)) {
+				f_spawn.worker(spawn, 'hauler', parts.hauler);
 			} else if (Memory.sources && (harvesters.length < Memory.sources.length)) {
 				for (let sc_mem in Memory.sources) {
-					console.log(Memory.sources[sc_mem].id)
 					let found = false;
-					for (let sc_hl in harvesters) {
-						console.log("sc_hl = " + sc_hl)
-						console.log("sc_hl = " + sc_hl.name)
-						if (Memory.sources[sc_mem].id == Game.creeps[sc_hl].memory.source_id) {
+					for (let i = 0;  i < harvesters.length; i++) {
+					    let sc_hl = harvesters[i]
+						if (Memory.sources[sc_mem].id == sc_hl.memory.source_id) {
 							found = true;
-							console.log(Memory.sources[sc_mem].id + " == " + Game.creeps[sc_hl].memory.source_id)
 						}
 					}
 					if (!(found)) {
-						console.log("not found")
-						console.log(sc_mem.id + " " + sc_mem.pos)
-						f_spawn.dropHarvester(spawn, parts.dropHarvester, sc_mem.id, sc_mem.pos);
+						f_spawn.dropHarvester(spawn, parts.dropHarvester, Memory.sources[sc_mem]);
 					}
 				}
 			} else if (upgraders.length < 1) {
-				f_spawn.worker(spawn, 'upgrader', parts.worker)
+				f_spawn.worker(spawn, 'upgrader', parts.worker);
 			} else if (builders.length < 1) {
-				f_spawn.worker(spawn, 'builder', parts.worker)
+				f_spawn.worker(spawn, 'builder', parts.worker);
 			} else if (defenders.length < 4) {
-				f_spawn.worker(spawn, 'defender', parts.defender)
+				f_spawn.worker(spawn, 'defender', parts.defender);
 			}
 		}
 	}
@@ -94,7 +89,7 @@ module.exports.loop = function () {
     for(let name in Game.creeps) {
         let creep = Game.creeps[name];
         if(creep.memory.role == 'harvester') {
-            roleHarvester.run(creep);
+            roleHarvester.dropHarvest(creep);
         }
         if(creep.memory.role == 'upgrader') {
             roleUpgrader.run(creep);
@@ -104,6 +99,9 @@ module.exports.loop = function () {
         }
         if(creep.memory.role == 'defender') {
             roleDefender.atk(creep);
+        }
+        if(creep.memory.role == 'hauler') {
+            roleHauler.run(creep)
         }
     }
     //roads.run()

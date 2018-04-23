@@ -54,17 +54,9 @@ var roleHarvester = {
     },
     
     dropHarvest: function(creep) { // definitely use this at RCL 2. switch to canMine after for carry part for occasional repairs.
-        if (!(creep.memory.sourceID)) {
-            /*
-            find sources
-            loop til you find a source that there is no harvester for
-            */
-        } else if (!(creep.memory.dropPos)) {
-            /*
-            scan the area around a source til you find an empty space you can path to, then make that your position.
-            !!!!
-            Maybe put both of these in the spawn program
-            */
+        let target = Game.getObjectById(creep.memory.source_id)
+        if (creep.harvest(target) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(target)
         }
         /*
         go to position

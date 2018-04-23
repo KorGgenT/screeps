@@ -39,14 +39,14 @@ var f_spawn = {
     hauler: function(spawn, bodyparts, sc_mem) {
         
     },
-	dropHarvester: function(spawn, bodyparts, sc_mem_id, sc_mem_pos) {
-		console.log(sc_mem_id)
+	dropHarvester: function(spawn, bodyparts, sc_mem) {
+		console.log(sc_mem.id)
 		Game.spawns[spawn].spawnCreep(bodyparts, ('harvester' + Game.time),
 			{memory: {
 				role: 'harvester', 
 				home:spawn, 
-				source_id: sc_mem_id, 
-				source_pos: sc_mem_pos
+				source_id: sc_mem.id, 
+				source_pos: sc_mem.pos
 			}});
 	}
 }
